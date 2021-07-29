@@ -1,0 +1,78 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col">
+
+      <h2>Pre rýchle prehľadávanie VŠETKÝCH zápasov:</h2>
+      <div>
+      <nav class="navbar">
+        <input
+          type="text"
+          class="form-control"
+          name="EventName"
+          [(ngModel)]="eventName"
+          (ngModelChange)="Search()"
+          placeholder="Vyhľadaj zápas podľa názvu"
+        />
+      </nav>
+    </div>
+
+      <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+        <thead class="bg-info bg-gradient text-white" style="text-shadow: 1px 1px 1.5px #000;">
+          <tr>
+            <th scope="col" (click)="sort('EventName')">
+              <i class="fa fa-sort"></i> Názov
+            </th>
+            <th (click)="sort('EventDate')">
+              <i class="fa fa-sort"></i> Dátum & čas
+            </th>
+
+            <!-- <th class="text-center">
+              <div class="dropdown">
+                <th class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-trophy" aria-hidden="true"></i> Šport
+                </th>
+                <ul class="dropdown-menu" style="text-shadow: none;" aria-labelledby="dropdownMenuButton1" *ngFor="let event of events">
+                  <li class="text-center">{{ labels["SP_"+event.SportID].Name }}</li>
+                </ul>
+              </div>
+            </th> -->
+            <th class="text-center"><i class="fa fa-trophy" aria-hidden="true"></i> Šport </th>
+            <th class="text-center"><i class="fa fa-globe" aria-hidden="true"></i> Región </th>
+            <th class="text-center"><i class="fa fa-users" aria-hidden="true"></i> Liga </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 1 </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> X </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 2 </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 1X </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 2X </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let event of events | orderBy: key:reverse | paginate: { itemsPerPage: 10, currentPage: p }">
+            <td class="bg-light bg-gradient">{{ event.EventName }}</td>
+            <td class="text-center">{{ event.EventDate | date: "d.M. HH:mm" }}</td>
+            <td class="bg-light bg-gradient text-center">{{ labels["SP_"+event.SportID]?.Name }}</td>
+            <td class="text-center">{{ labels["RE_"+event.RegionID]?.Name }}</td>
+            <td class="bg-light bg-gradient text-center">{{ labels["LC_"+event.LeagueCupID]?.Name }}</td>
+
+            <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_1'] !== undefined; else elseBlock">{{ odds[event.EventChanceTypeID+'_1'].OddsRate }}</td>
+            <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_X'] !== undefined; else elseBlock"> {{ odds[event.EventChanceTypeID+'_X'].OddsRate }}</td>
+            <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_2'] !== undefined; else elseBlock"> {{ odds[event.EventChanceTypeID+'_2'].OddsRate }}</td>
+            <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_1X'] !== undefined; else elseBlock"> {{ odds[event.EventChanceTypeID+'_1X'].OddsRate }}</td>
+            <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_X2'] !== undefined; else elseBlock"> {{ odds[event.EventChanceTypeID+'_X2'].OddsRate }}</td>
+
+            <ng-template #elseBlock> <td class="text-center"> ☹ n/a </td> </ng-template>
+
+          </tr>
+        </tbody>
+      </table>
+
+      <pagination-controls previousLabel="Predošlé"
+      nextLabel="Nasledujúce" screenReaderPaginationLabel="Stránkovanie"
+      screenReaderPageLabel="strana"
+      screenReaderCurrentLabel="Si na strane: " (pageChange)="p = $event"></pagination-controls>
+
+    </div>
+  </div>
+</div>

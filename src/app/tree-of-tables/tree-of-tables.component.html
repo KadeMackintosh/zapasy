@@ -1,0 +1,80 @@
+
+
+<div class="content">
+  <div class="row">
+    <h3>Vyber si z ponuky športov </h3>
+
+
+    <div class="col-1">
+      <ul class="list-group" *ngFor="let sport of events |groupBy: 'SportID'">
+        <li class="list-group-item list-group-item-action text-center" (click)="doSports(sport.value, labels['SP_' + sport.key]?.Name)">{{ labels['SP_' + sport.key]?.Name }}</li>
+      </ul>
+    </div>
+
+
+    <div class="col-2" *ngIf="this.regionIsVisible">
+      <ul class="list-group" *ngFor="let region of sportValue | groupBy:'RegionID'">
+        <li class="list-group-item list-group-item-action text-center border-0" (click)="doRegions(region.value, labels['RE_'+region.key].Name)"> {{labels['RE_'+region.key]?.Name}}</li>
+      </ul>
+    </div>
+
+
+    <div class="col-2" *ngIf="this.leagueIsVisible  && this.regionIsVisible">
+      <ul class="list-group" *ngFor="let league of regionValue | groupBy:'LeagueCupID'">
+        <li class="list-group-item list-group-item-action text-center border-0" (click)="doLeagues(league.value, labels['LC_'+league.key].Name)">  {{labels['LC_'+league.key]?.Name}}</li>
+      </ul>
+    </div>
+
+    <div class="col-2"  *ngIf="this.eventIsVisible && this.leagueIsVisible && this.regionIsVisible">
+      <ul class="list-group" *ngFor="let event of leagueValue">
+        <a href="#offcanvasExample" data-bs-toggle="offcanvas" role="button" aria-controls="offcanvasExample">
+        <li class="list-group-item list-group-item-action text-center border-0" (click)="doEvents(event.EventChanceTypeID, event.EventName)"> {{event.EventName}}</li>
+        </a>
+      </ul>
+    </div>
+
+
+
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h1 class="offcanvas-title" id="offcanvasExampleLabel"><i class="fa fa-ticket" aria-hidden="true"></i> Ticket </h1>
+      <h3>Zhrnutie </h3>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <h3>Kurzy pre Vami zadané kritériá: </h3>
+        <h4>šport: {{  selectedSportName }} <br> región: {{selectedRegionName}} <br> liga: {{selectedLeagueName}} <br> zápas: {{selectedEventName}}</h4>
+        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+          <thead class="bg-info bg-gradient text-white" style="text-shadow: 1px 1px 1.5px #000;">
+            <tr>
+              <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 1 </th>
+              <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> X </th>
+              <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 2 </th>
+              <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 1X </th>
+              <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 2X </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="text-center" *ngIf="odds[eventValue+'_1'] !== undefined; else elseBlock" >{{ odds[eventValue+'_1'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[eventValue+'_X'] !== undefined; else elseBlock" > {{ odds[eventValue+'_X'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[eventValue+'_2'] !== undefined; else elseBlock" > {{ odds[eventValue+'_2'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[eventValue+'_1X'] !== undefined; else elseBlock"> {{ odds[eventValue+'_1X'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[eventValue+'_X2'] !== undefined; else elseBlock"> {{ odds[eventValue+'_X2'].OddsRate }}</td>
+
+              <ng-template #elseBlock> <td class="text-center"> ☹ n/a </td> </ng-template>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="btn btn-primary">Objednať</button>
+    </div>
+
+  </div>
+</div>
+

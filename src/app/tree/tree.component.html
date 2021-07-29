@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <h2>Pozn.: Toto slúži iba ako názorná ukážka, že ako vyzerajú dáta v stromovej štruktúre (keď ich "zgrupím" podľa JSON kľúčov).</h2>
+    <div class="col">
+      <ul *ngFor="let sport of events | groupBy:'SportID'">
+       <li>(id: {{ sport.key }}) {{labels['SP_'+sport.key]?.Name}}  <!-- Typescript nezvláda pristupovanie prvkov v poli, podľa string hodnoty - tak ako by to bol zvládol javascript -->
+        <ul *ngFor="let region of sport.value | groupBy:'RegionID'" >
+          <li>(id: {{ region.key }}) {{labels['RE_'+region.key]?.Name}}
+            <ul  *ngFor="let league of region.value | groupBy:'LeagueCupID'">
+              <li> (id: {{ league.key }}) {{labels['LC_'+league.key]?.Name}} </li>
+            </ul>
+          </li>
+        </ul></li>
+      </ul>
+    </div>
+  </div>

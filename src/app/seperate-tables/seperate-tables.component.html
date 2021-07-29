@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h3>Dynamicky načítané & usporiadané zápasy podľa kategórie športov:</h3>
+      <div *ngFor="let sport of events | groupBy: 'SportID'">
+        <h1>{{ labels["SP_" + sport.key]?.Name }}ové zápasy:</h1>
+        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+          <thead
+            class="bg-info bg-gradient text-white"
+            style="text-shadow: 1px 1px 1.5px #000"
+          >
+            <tr>
+              <th>Názov</th>
+              <th>Dátum & čas</th>
+              <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 1 </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> X </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 2 </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 1X </th>
+            <th class="text-center"><i class="fa fa-balance-scale" aria-hidden="true"></i> 2X </th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let event of sport.value">
+              <td [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}">{{ event.EventName }}</td>
+              <td class="text-center" [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}">{{ event.EventDate | date: "d.M. HH:mm" }}</td>
+              <ng-template #elseBlock> <td class="text-center"> - </td> </ng-template>
+
+              <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_1'] !== undefined; else elseBlock" [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}">{{ odds[event.EventChanceTypeID+'_1'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_X'] !== undefined; else elseBlock" [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}"> {{ odds[event.EventChanceTypeID+'_X'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_2'] !== undefined; else elseBlock" [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}"> {{ odds[event.EventChanceTypeID+'_2'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_1X'] !== undefined; else elseBlock" [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}"> {{ odds[event.EventChanceTypeID+'_1X'].OddsRate }}</td>
+              <td class="text-center" *ngIf="odds[event.EventChanceTypeID+'_X2'] !== undefined; else elseBlock" [ngClass]="{'bg-info bg-gradient' : this.leagueID == event.LeagueCupID}"> {{ odds[event.EventChanceTypeID+'_X2'].OddsRate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="col-4">
+      <h3>Zápasy podľa líg & športu</h3>
+      <div *ngFor="let sport of events | groupBy: 'SportID'">
+        <h1>{{ labels["SP_" + sport.key]?.Name }}ové ligy:</h1>
+        <table class="table table-bordered shadow p-3 mb-5 bg-white rounded">
+          <thead
+            class="bg-info bg-gradient text-white"
+            style="text-shadow: 1px 1px 1.5px #000"
+          >
+            <tr>
+              <th>Názov</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let event of sport.value | groupBy: 'LeagueCupID'">
+              <td class="bg-light bg-gradient" >{{ labels["LC_"+event.key]?.Name }} <i class="fa fa-search float-end" aria-hidden="true" (click)="filterEvents(event.key)" aria-hidden="true"></i></td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
